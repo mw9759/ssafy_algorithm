@@ -1,4 +1,4 @@
-package algorithm.daily.ws;
+package algorithm.daily.ws0206;
 
 public class 문제2_조합재귀_손민우 {
 	static int arr[] = {1,2,3,4,5,6}; //배열선언

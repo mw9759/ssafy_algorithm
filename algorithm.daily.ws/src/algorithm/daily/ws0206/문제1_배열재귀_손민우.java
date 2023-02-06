@@ -1,4 +1,4 @@
-package algorithm.daily.ws;
+package algorithm.daily.ws0206;
 
 public class 문제1_배열재귀_손민우 {
 
