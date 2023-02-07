@@ -25,5 +25,4 @@ public class 문제3_하노이탑_손민우 {
 			solution(n-1, otherPoint, endPoint, startPoint);
 		}
 	}
-
 }
