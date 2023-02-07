@@ -24,19 +24,19 @@ public class D3_2805_농작물수확하기_손민우 {
 	}
 	
 	private static int solution(int n, int[][] arr) {
-		int x = 0;
-		int answer = 0;
-		for(int i =0; i<n; i++) { 
-			if(i<n/2) {
-				for(int j = n/2-x; j<=n/2+x;j++) {
-					answer += arr[i][j];
+		int x = 0; // 인덱스 슬라이싱 할 기준 변수.
+		int answer = 0; // 정답 
+		for(int i =0; i<n; i++) { // 농경지의 행별로 확인.
+			if(i<n/2) { // 농경지의 상단부분일경우: 수확  농경지 점점 증가.
+				for(int j = n/2-x; j<=n/2+x;j++) { // n/2-x: x초기값은 0이기에 정중앙이다. 
+					answer += arr[i][j];		//그렇다면 n/2+x도 정중앙이기에 한곳에서만 수확을 가져올수있다.
 				}
-				x++;
-			} else {
-				for(int j = n/2-x; j<=n/2+x;j++) {
+				x++;// 다음행으로 이동하기에 수확할 부분이 증가-> x를 1 증가시킴으로서 다음행에서 좌/우측 한곳씩 더 수확한다.
+			} else { // 농경지의 중앙행+하단부분: 수확농경지 점점 감소.
+				for(int j = n/2-x; j<=n/2+x;j++) { //x값에 따라서 수확칸이 달라진다.
 					answer+= arr[i][j];
 				}
-				x--;
+				x--; //중간을지나면서 행이 증가함에 따라 x는 감소해야 좌/우측 한곳씩 덜 수확한다.
 			}
 		}
 		return answer;
