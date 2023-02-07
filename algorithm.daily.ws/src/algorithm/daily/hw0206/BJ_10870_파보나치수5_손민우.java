@@ -3,7 +3,7 @@ package algorithm.daily.hw0206;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class BJ_10870_파보나치수5 {
+public class BJ_10870_파보나치수5_손민우 {
 
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); //데이터 입력 객체
