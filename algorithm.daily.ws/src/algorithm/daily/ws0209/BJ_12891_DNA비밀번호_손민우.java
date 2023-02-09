@@ -34,7 +34,8 @@ public class BJ_12891_DNA비밀번호_손민우 {
 	
 	private static int solution(String str) {
 		int answer = 0;
-		map.put('A', 0);
+		// ACGT 값을 미리 초기화
+		map.put('A', 0); 
 		map.put('C', 0);
 		map.put('G', 0);
 		map.put('T', 0);
@@ -43,15 +44,17 @@ public class BJ_12891_DNA비밀번호_손민우 {
 		for(int j = 0; j<p; j++) {
 			map.put(str.charAt(j), map.get(str.charAt(j))+1);
 		}
+		// 첫 슬라이싱된 암호가 사용가능한지
 		if(map.get('A')>=A && map.get('C')>=C && map.get('G')>=G && map.get('T')>=T) {
 			answer++;
 		}
-		
-		int start = 0;
-		int end = start+p;
-		for(int i = 0; i<s-p; i++) {
-			map.put(str.charAt(start+i), map.get(str.charAt(start+i))-1);
-			map.put(str.charAt(end+i), map.get(str.charAt(end+i))+1);
+		// 두번째 슬라이싱부터 끝까지 비교
+		int start = 0; // 시작점
+		int end = start+p; //끝점
+		for(int i = 0; i<s-p; i++) { // 뒤에서 p번째 까지만  -> 슬라이싱된 길이 p
+			map.put(str.charAt(start+i), map.get(str.charAt(start+i))-1); //슬라이싱에서 사라질 암호 다시 빼주기
+			map.put(str.charAt(end+i), map.get(str.charAt(end+i))+1); // 새로 들어올 암호 넣기
+			// 조건에 맞으면 사용가능한 암호
 			if(map.get('A')>=A && map.get('C')>=C && map.get('G')>=G && map.get('T')>=T) {
 				answer++;
 			}
