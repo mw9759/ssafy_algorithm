@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class BJ_11660_구간함구하기5_손민우 {
+public class BJ_11660_구간합구하기5_손민우 {
 	private static int n;//주어질 숫자의 개수
 	private static int m; //합을 구해야하는 횟수
 	private static int[][] arr2; // m*4  배열 -> 시작좌표(x1,y1)+도착좌표(x2,y2)를 m개만큼 담을 배열.
