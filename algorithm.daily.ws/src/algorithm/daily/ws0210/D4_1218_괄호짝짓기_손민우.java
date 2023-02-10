@@ -13,8 +13,7 @@ public class D4_1218_괄호짝짓기_손민우 {
 			
 			String s = br.readLine();
 			
-			
-			System.out.println("#"+i+" "+solution(n, s));
+			System.out.println("#"+i+" "+solution(n, s));//출력
 		}
 	
 		
@@ -29,31 +28,31 @@ public class D4_1218_괄호짝짓기_손민우 {
 		if(close.contains(Character.toString(s.charAt(0)))) return 0;	// 맨뒤가 여는 괄호면 바로0리턴
 
 		for(int i = 0; i<n; i++) {
-			if(stack.isEmpty()) stack.push(s.charAt(0));
-			if(stack.peek() == '(') {
-				if(s.charAt(i) == ')') stack.pop(); //만약 열림괄호 짝인 닫힌괄호가 들어오면 stack 맨위 제거
-				else if(open.contains(Character.toString(s.charAt(i)))) stack.push(s.charAt(i)); //만약 여는괄호면 stack에 새로 쌓기.
-				else return 0;// 짝이아닌 닫는괄호면 0리턴.
+			if(stack.isEmpty() && close.contains(Character.toString(s.charAt(i)))) return 0;// 스택이 비었지만 들어온게 닫는괄호면 0리턴.
+			else if(stack.isEmpty() || open.contains(Character.toString(s.charAt(i)))) stack.push(s.charAt(i));// 만약 스택이 비어있으면 
+			
+			else if(s.charAt(i) == ')') { //닫는게 나오면
+				if(stack.peek()=='(') stack.pop(); //자기 짝궁이 스택바로위에 있는게 아니면 다 0리턴.
+				else return 0;
 			}
-			else if(stack.peek() == '{') {
-				if(s.charAt(i) == '}') stack.pop(); //만약 열림괄호 짝인 닫힌괄호가 들어오면 stack 맨위 제거
-				else if(open.contains(Character.toString(s.charAt(i)))) stack.push(s.charAt(i)); //만약 여는괄호면 stack에 새로 쌓기.
-				else return 0;// 짝이아닌 닫는괄호면 0리턴.
+			
+			else if(s.charAt(i) == ']') {
+				if(stack.peek()=='[') stack.pop();
+				else return 0;
 			}
-			else if(stack.peek() == '[') {
-				if(s.charAt(i) == ']') stack.pop(); //만약 열림괄호 짝인 닫힌괄호가 들어오면 stack 맨위 제거
-				else if(open.contains(Character.toString(s.charAt(i)))) stack.push(s.charAt(i)); //만약 여는괄호면 stack에 새로 쌓기.
-				else return 0;// 짝이아닌 닫는괄호면 0리턴.
+			
+			else if(s.charAt(i) == '}') {
+				if(stack.peek()=='{') stack.pop();
+				else return 0;
 			}
-			else if(stack.peek() == '<') {
-				if(s.charAt(i) == '>') stack.pop(); //만약 열림괄호 짝인 닫힌괄호가 들어오면 stack 맨위 제거
-				else if(open.contains(Character.toString(s.charAt(i)))) stack.push(s.charAt(i)); //만약 여는괄호면 stack에 새로 쌓기.
-				else return 0;// 짝이아닌 닫는괄호면 0리턴.
+			
+			else if(s.charAt(i) == '>') {
+				if(stack.peek()=='<') stack.pop();
+				else return 0;
 			}
 		}
-		System.out.println(stack);
-		if(stack.isEmpty()) return 1;
-		else return 0;
+		if(stack.isEmpty()) return 1; //스택이 비었으면 짝을 다 찾았다.
+		else return 0;				//남아있는게 있으면 0리턴.
 	}
 
 }
