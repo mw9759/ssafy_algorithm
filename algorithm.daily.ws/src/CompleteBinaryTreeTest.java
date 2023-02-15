@@ -9,7 +9,10 @@ public class CompleteBinaryTreeTest {
 		for(int i = 0; i<size; i++) {
 			tree.add((char)(65+i));
 		}
-		tree.bfs();
+		//tree.bfs();
+		tree.dfsByperoOrder();
+		tree.dfsByInOrder();
+		tree.dfsByPostOrder();
 	}
 
 }
