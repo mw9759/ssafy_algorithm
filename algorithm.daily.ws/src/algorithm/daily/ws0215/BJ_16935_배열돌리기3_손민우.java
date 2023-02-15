@@ -75,6 +75,6 @@ public class BJ_16935_배열돌리기3_손민우 {
 		int tmp = n;
 		n = m;
 		n = tmp;
-
 	}
+	
 }
