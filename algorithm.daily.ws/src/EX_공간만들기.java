@@ -14,8 +14,8 @@ public class EX_공간만들기 {
 	static void cut(int r, int c, int size) {
 		
 		int sum = 0;
-		for(int i = r, rEnd = r+size; i<rEnd; i++) {
-			for(int j = c, cEnd = c+size; j < cEnd; j++) {
+		for(int i = r; i<r+size; i++) {
+			for(int j = c; j < c+size; j++) {
 				sum += spaces[i][j];
 			}
 		}
