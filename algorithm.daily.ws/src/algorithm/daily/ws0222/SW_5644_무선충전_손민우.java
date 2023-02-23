@@ -12,8 +12,8 @@ public class SW_5644_무선충전_손민우 {
 	static int n, a; // 이동거리 , bc개수
 	static int Aman[], Bman[];
 	static int bc[][];
-	static int AP, BP;
-	static int pointA[], pointB[]= new int[2];
+	static int sum;
+	static int pointA[]= new int[2], pointB[]= new int[2];
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int t = Integer.parseInt(br.readLine());
@@ -25,10 +25,9 @@ public class SW_5644_무선충전_손민우 {
 			Aman = new int[n];
 			Bman = new int[n];
 			bc = new int[a][4];
-			AP = 0;
-			BP = 0;
-			pointA = new int[2];
-			pointB[0]=pointB[1]=100;
+			sum = 0;
+			pointA[0] = pointA[1] = 1;
+			pointB[0] = pointB[1] = 10;
 			
 			st = new StringTokenizer(br.readLine());
 			StringTokenizer st2 = new StringTokenizer(br.readLine());
@@ -45,45 +44,52 @@ public class SW_5644_무선충전_손민우 {
 			}
 			
 			move(0);
-			System.out.println(AP+BP);
+			System.out.println("#"+tc+" "+sum);
 		}
 	}
-	
+	static List<Integer> am;
+	static List<Integer> bm;
 	private static void move(int cnt) {
 		
-		while(cnt<n) {
-			List<Integer> am = new ArrayList<Integer>();
-			am.add(0);
-			am.add(0);
-			List<Integer> bm = new ArrayList<Integer>();
-			bm.add(0);
-			bm.add(0);
+		while(cnt<=n) {
+			am = new ArrayList<Integer>();
+			bm = new ArrayList<Integer>();
 			for(int i = 0; i<a; i++) {
 				if(Math.abs(pointA[0]-bc[i][1])+ Math.abs(pointA[1]-bc[i][0]) <= bc[i][2]) {// I번 bc존에 포함되있다.
 					am.add(bc[i][3]);
-				}; 
+				}
 				if(Math.abs(pointB[0]-bc[i][1])+ Math.abs(pointB[1]-bc[i][0]) <= bc[i][2]) {
 					bm.add(bc[i][3]);
 				}
 			}
-			
-			int sumA = 0;
-			int sumB = 0;
 			Collections.sort(am);
 			Collections.sort(bm);
-			if(am.get(am.size()-1)!=bm.get(bm.size()-1)) {
-				sumA = am.get(am.size()-1);
-				sumB = bm.get(bm.size()-1);
+			if(am.isEmpty() && bm.isEmpty()); //둘다 비었을때
+			else if(!am.isEmpty() && bm.isEmpty()) { // b만 비었을때 
+				sum += am.get(am.size()-1);
+//				System.out.println("@"+cnt+" a삽입");
+			}
+			else if(am.isEmpty() && !bm.isEmpty()) { // a만 비었을때
+				sum += bm.get(bm.size()-1);
+//				System.out.println("@"+cnt+" b삽입");
+			}
+			else if(am.get(am.size()-1) != bm.get(bm.size()-1)) {
+				sum+=am.get(am.size()-1)+bm.get(bm.size()-1);
+//				System.out.println("@"+cnt+" 둘다추가");
+			}
+			// 둘다 기지국이 하나이며 같은 기지국을 쓸 때.
+			else if(am.size() == 1 && bm.size() == 1) {
+				sum += am.get(0); 
+//				System.out.println("@"+cnt+" 반반");
 			}
 			
 			else {
-				sumA = Math.max(am.get(am.size()-1), bm.get(bm.size()-1));
-				sumB = Math.max(am.get(am.size()-2), bm.get(bm.size()-2));
+//				System.out.println("@"+cnt+" else");
+				sum+= am.get(am.size()-1);
+				sum+= Math.max(am.size()>1 ? am.get(am.size()-2):0, bm.size()>1 ? bm.get(bm.size()-2):0);
 			}
-			
-			AP += sumA;
-			BP += sumB;
-			System.out.println(AP+" "+BP);
+			if(cnt == 20) break;
+			//System.out.println(AP+" "+BP);
 			int pa = Aman[cnt];
 			if(pa == 1) pointA[0]--;
 			else if(pa == 2)pointA[1]++;
@@ -99,7 +105,6 @@ public class SW_5644_무선충전_손민우 {
 			cnt++;
 		}
 	}
-	
 
 }
 /*
