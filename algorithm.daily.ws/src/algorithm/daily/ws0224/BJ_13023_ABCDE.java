@@ -2,42 +2,64 @@ package algorithm.daily.ws0224;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class BJ_13023_ABCDE {
-	static int n,m;
-	static int arr[][];
-	static int visit[];
-	static int numbers[];
+	static int n,m; 
+	static ArrayList<ArrayList<Integer>> list;
+	static int visited[];
+	static int answer = 0;
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		n = Integer.parseInt(st.nextToken());
-		m = Integer.parseInt(st.nextToken());
-		arr = new int[n][2];
-		visit = new int[n];
-		numbers = new int[n];
+		n = Integer.parseInt(st.nextToken()); //사람 수
+		m = Integer.parseInt(st.nextToken()); // 친구관계 수
 		
-		for(int i = 0; i <n; i++) {
-			st = new StringTokenizer(br.readLine());
-			arr[i][0] = Integer.parseInt(st.nextToken());
-			arr[i][1] = Integer.parseInt(st.nextToken());
-		}
-		System.out.println(dfs(0, 0));
+		list = new ArrayList<ArrayList<Integer>>(); // n번째 사람의 모든 친구정보를 담을 리스트
+		visited = new int[n]; // 친구관계 포함 여부체크
 		
-	}
-	
-	private static int dfs(int cnt, int check) {
-		if(cnt == 5) {
-			return 1;
-		}
+		//list 초기화
 		for(int i = 0; i<n; i++) {
-			if(arr[i][0] == check && visit[check] == 0) {
-				visit[i] = 1;
-				dfs(cnt+1,arr[i][1]);
+			list.add(new ArrayList<Integer>());
+		}
+		// 관계 데이터 입력.: 양방향으로 친구이기에 이부분 고려해서 관계추가
+		for(int i = 0; i<m; i++) {
+			st = new StringTokenizer(br.readLine());
+			int to =Integer.parseInt(st.nextToken());
+			int from =Integer.parseInt(st.nextToken());
+			list.get(to).add(from);
+			list.get(from).add(to);
+		}
+		// A-E 여부 확인
+		for(int i = 0; i<n; i++) { // 사람수만큼 반복. i를 시작인 A로
+			visited[i] = 1; // 방문체크
+			dfs(0,i);	// i번 사람이 선두일떄의 경우 확인
+			visited[i] = 0;	// 방문해제
+			if(answer == 1) { //만약 A-E가 완성되었다면 BREAK;
+				break;
 			}
 		}
-		return 0;
+		System.out.println(answer == 1? 1:0); // 출력
+	}
+	
+	private static void dfs(int cnt, int x) {
+		if(answer == 1) return; // 이미 A-E가 완성된 경우 더이상 탐색 X
+		
+		//추가로 A-E가 완성이 되었다면
+		if(cnt == 4) {// : main에서 1+dfs에서 4= 5 A-E완성 
+			answer = 1; // 정답 1로 초기화
+			return; 
+		}
+		for(int i = 0; i<list.get(x).size(); i++) { //A의 친구들 수만큼 반복: 모든 친구들 검증
+			int number = list.get(x).get(i); // 친구 번호
+			if(visited[number] == 0) { //만약 A-E에 포함이 안되어 있다면
+				visited[number] =1;	// 포함 체크
+				dfs(cnt+1,number);	// 포함한 채로 다음 친구 찾기.
+				visited[number] =0; // 다 돌고 돌아온 경우는 못찾은 경우이기에 다음 검증을 위해 방문 해제.
+			}
+		}
 	}
 
 }
