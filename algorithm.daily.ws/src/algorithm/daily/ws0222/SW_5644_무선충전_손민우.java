@@ -47,49 +47,62 @@ public class SW_5644_무선충전_손민우 {
 			System.out.println("#"+tc+" "+sum);
 		}
 	}
-	static List<Integer> am;
-	static List<Integer> bm;
+	static List<int[]> am;
+	static List<int[]> bm;
 	private static void move(int cnt) {
 		
 		while(cnt<=n) {
-			am = new ArrayList<Integer>();
-			bm = new ArrayList<Integer>();
+			am = new ArrayList<>();
+			bm = new ArrayList<>();
 			for(int i = 0; i<a; i++) {
 				if(Math.abs(pointA[0]-bc[i][1])+ Math.abs(pointA[1]-bc[i][0]) <= bc[i][2]) {// I번 bc존에 포함되있다.
-					am.add(bc[i][3]);
+					int arr[] = {i,bc[i][3]};
+					am.add(arr);
 				}
 				if(Math.abs(pointB[0]-bc[i][1])+ Math.abs(pointB[1]-bc[i][0]) <= bc[i][2]) {
-					bm.add(bc[i][3]);
+					int arr[] = {i,bc[i][3]};
+					bm.add(arr);
 				}
 			}
-			Collections.sort(am);
-			Collections.sort(bm);
-			if(am.isEmpty() && bm.isEmpty()); //둘다 비었을때
+			
+			Collections.sort(am, (o1, o2)->{
+				return Integer.compare(o2[1], o1[1]);
+			});
+			Collections.sort(bm, (o1, o2)->{
+				return Integer.compare(o2[1], o1[1]);
+			});
+			
+//			System.out.println("a"+cnt+" "+ pointA[0]+ " "+pointA[1]);
+//			System.out.println("b"+cnt+" "+ pointB[0]+ " "+pointB[1]);
+			if(am.isEmpty() && bm.isEmpty()) {
+//				System.out.println("아무일x");
+			} //둘다 비었을때
 			else if(!am.isEmpty() && bm.isEmpty()) { // b만 비었을때 
-				sum += am.get(am.size()-1);
+				sum += am.get(0)[1];
 //				System.out.println("@"+cnt+" a삽입");
 			}
 			else if(am.isEmpty() && !bm.isEmpty()) { // a만 비었을때
-				sum += bm.get(bm.size()-1);
+				sum += bm.get(0)[1];
 //				System.out.println("@"+cnt+" b삽입");
 			}
-			else if(am.get(am.size()-1) != bm.get(bm.size()-1)) {
-				sum+=am.get(am.size()-1)+bm.get(bm.size()-1);
+			else if((int)am.get(0)[0] != (int)bm.get(0)[0]) {
+				sum+=am.get(0)[1]+bm.get(0)[1];
 //				System.out.println("@"+cnt+" 둘다추가");
 			}
 			// 둘다 기지국이 하나이며 같은 기지국을 쓸 때.
-			else if(am.size() == 1 && bm.size() == 1) {
-				sum += am.get(0); 
+			else if(am.size() == 1 && bm.size() == 1 && am.get(0)[0] == bm.get(0)[0]) {
+				sum += am.get(0)[1]; 
 //				System.out.println("@"+cnt+" 반반");
 			}
 			
 			else {
 //				System.out.println("@"+cnt+" else");
-				sum+= am.get(am.size()-1);
-				sum+= Math.max(am.size()>1 ? am.get(am.size()-2):0, bm.size()>1 ? bm.get(bm.size()-2):0);
+				sum+= am.get(0)[1];
+				sum+= Math.max(am.size()>1 ? am.get(1)[1]:0, bm.size()>1 ? bm.get(1)[1]:0);
 			}
-			if(cnt == 20) break;
-			//System.out.println(AP+" "+BP);
+//			System.out.println(sum);
+//			System.out.println();
+			if(cnt == n) break;
 			int pa = Aman[cnt];
 			if(pa == 1) pointA[0]--;
 			else if(pa == 2)pointA[1]++;
