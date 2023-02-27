@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class D4_7465_창용마을무리의개수_손민우 {
+public class D4_7465_창용마을무리의개수_손민우_서현영 {
 	
 	static int arr[]; // n개의 집합을 담을 배열.
 	
