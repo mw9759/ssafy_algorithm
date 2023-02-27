@@ -8,164 +8,94 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 class Point {
-	int x,y;
-	Point(int x, int y){
+	int x1,y1,x2,y2,count;
+	Point(int x1, int y1, int x2, int y2, int count){
+		this.x1 = x1;
+		this.y1 = y1;
+		this.x2 = x2;
+		this.y2 = y2;
+		this.count = count;
+	}
+}
+class Coin{
+	int x, y;
+	Coin(int x, int y){
 		this.x = x;
 		this.y = y;
 	}
 }
 public class BJ_16197_두동전_손민우 {
 	
-	static int n,m,count=1, flag = 0;
+	static int n,m;
 	static char arr[][];
-	static Queue<Point> que = new LinkedList<Point>();
-	
+	static Coin[] coin = new Coin[2];
+	static int visited[][][][];
+	static int dx[] = {0,1,0,-1}, dy[] = {1,0,-1,0};
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		n = Integer.parseInt(st.nextToken());
 		m = Integer.parseInt(st.nextToken());
-		arr = new char[n+2][m+2];
-		
-		for(int i = 1; i<=n; i++) {
+		arr = new char[n][m];
+		visited = new int[n][m][n][m];
+		int c = 0;
+		for(int i = 0; i<n; i++) {
 			String str = br.readLine();
-			for(int j = 1; j<=m; j++) {
-				arr[i][j] = str.charAt(j-1);
+			for(int j = 0; j<m; j++) {
+				arr[i][j] = str.charAt(j);
 				if(arr[i][j] == 'o') {
-					que.add(new Point(i,j));
+					coin[c++] = new Coin(i,j);
 				}
 			}
 		}
-		dropCoin();
-		System.out.println(count);
-//		for(char[] i : arr) {
-//			System.out.println(Arrays.toString(i));
-//		}
-//		System.out.println(arr[0][0] == ' ');
-//		System.out.println(que.size());
-	}
-	private static void dropCoin() {
 		
+		
+		System.out.println(dropCoin());
+	}
+	private static int dropCoin() {
+		Queue<Point> que = new LinkedList<Point>();
+		que.add(new Point(coin[0].x, coin[0].y, coin[1].x, coin[1].y, 0));
+		visited[coin[0].x][coin[0].y][coin[1].x][coin[1].y] = 1;
 		while(!que.isEmpty()) {
-			int size =que.size()/2;
-			for(int i = 0; i<size; i++) {
-				int coin1X = que.peek().x;
-				int coin1Y = que.poll().y;
-				int coin2X = que.peek().x;
-				int coin2Y = que.poll().y;
-				int isdrop1 = 0;
-				int isdrop2 = 0;
+			Point temp = que.poll();
+			int x1 = temp.x1;
+			int y1 = temp.y1;
+			int x2 = temp.x2;
+			int y2 = temp.y2;
+			int count = temp.count;
+			if(count>=10) break;
+			
+			for(int i = 0; i<4; i++) {
+				int nx1 = x1+dx[i];
+				int ny1 = y1+dy[i];
+				int nx2 = x2+dx[i];
+				int ny2 = y2+dy[i];
 				
-				//좌측이동@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-				char coin1Left = arr[coin1X][coin1Y-1];
-				char coun2Left = arr[coin2X][coin2Y-1];
-				
-				//코인1 좌측
-				if(coin1Left == '.') {// 코인1 왼쪽에 공간이 있다면 이동
-					que.add(new Point(coin1X, coin1Y-1)); //큐에 다음좌표 담기
-					arr[coin1X][coin1Y] = '.'; //코인있던자리 빈공간으로
-					arr[coin1X][coin1Y-1] = 'o'; //빈공간 자리 코인으로
+				// 다음 이동지가 벽인지 확인.
+				//1번코인
+				if(nx1>=0 && nx1<n && ny1>=0 && ny1<m && arr[nx1][ny1] == '#') {
+					nx1 = x1;
+					ny1 = y1;
 				}
-				else if(coin1Left != '#') { //위에서 이동가능 공간이 걸러지고 만약 벽도 아니라면 낭떠러지
-					arr[coin1X][coin1Y] = '.';
-					isdrop1 = 1;// 코인이 떨어짐
-				}que.add(new Point(coin2X, coin2Y)); //벽인경우 큐에 현재 좌표 담기
-				//코인2 좌측
-				if(coun2Left == '.') {// 코인2도 왼쪽에 공간이 있다면 이동
-					que.add(new Point(coin2X, coin2Y-1)); //큐에 다음 좌표 담기
-					arr[coin2X][coin2Y] = '.'; //코인있던자리 빈공간으로
-					arr[coin2X][coin2Y-1] = 'o'; //빈공간 자리 코인으로
+				//2번코인
+				if(nx2>=0 && nx2<n && ny2>=0 && ny2<m && arr[nx2][ny2] == '#') {
+					nx2 = x2;
+					ny2 = y2;
 				}
-				else if(coin1Left != '#') { //위에서 이동가능 공간이 걸러지고 만약 벽도 아니라면 낭떠러지
-					arr[coin2X][coin2Y] = '.';
-					isdrop2 = 1;// 코인이 떨어짐
-				}que.add(new Point(coin2X, coin2Y)); //벽인경우 큐에 현재 좌표 담기
-				if(isdrop1 != isdrop2) return;
-				else isdrop1 = isdrop2 = 0;
-				
-				//상부이동@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-				char coin1Top = arr[coin1X-1][coin1Y];
-				char coun2Top = arr[coin2X-1][coin2Y];
-				//코인1 상부측
-				if(coin1Top == '.') {// 코인1 윗쪽에 공간이 있다면 이동
-					que.add(new Point(coin1X-1, coin1Y)); //큐에 다음좌표 담기
-					arr[coin1X][coin1Y] = '.'; //코인있던자리 빈공간으로
-					arr[coin1X-1][coin1Y] = 'o'; //빈공간 자리 코인으로
+				// 떨어지는 동전 확인
+				int drop = 0;
+				if(nx1>=0 && nx1<n && ny1>=0 && ny1<m) drop++;
+				if(nx2>=0 && nx2<n && ny2>=0 && ny2<m) drop++;
+				// 하나만 떨어진다면 카운트+1해서 리턴
+				if(drop == 1) return temp.count+1;
+				// 둘다 안떨어진다면 큐에 담고 다음 이동. 다음 이동지에 방문 기록도 없을때.
+				else if(drop == 2 && visited[nx1][ny1][nx2][ny2] == 0) {
+					visited[nx1][ny1][nx2][ny2] = 1; // 다음 이동지 방문표시.
+					que.add(new Point(nx1, ny1, nx2, ny2, count+1));
 				}
-				else if(coin1Top != '#') { //위에서 이동가능 공간이 걸러지고 만약 벽도 아니라면 낭떠러지
-					arr[coin1X][coin1Y] = '.';
-					isdrop1 = 1;// 코인이 떨어짐
-				}else que.add(new Point(coin2X, coin2Y)); //벽인경우 큐에 현재 좌표 담기
-				
-				//코인2 상부측
-				if(coun2Top == '.') {// 코인2도 왼쪽에 공간이 있다면 이동
-					que.add(new Point(coin2X-1, coin2Y)); //큐에 다음 좌표 담기
-					arr[coin2X][coin2Y] = '.'; //코인있던자리 빈공간으로
-					arr[coin2X-1][coin2Y] = 'o'; //빈공간 자리 코인으로
-				}
-				else if(coun2Top != '#') { //위에서 이동가능 공간이 걸러지고 만약 벽도 아니라면 낭떠러지
-					arr[coin2X][coin2Y] = '.';
-					isdrop2 = 1;// 코인이 떨어짐
-				} else que.add(new Point(coin2X, coin2Y)); //벽인경우 큐에 현재 좌표 담기
-				if(isdrop1 != isdrop2) return;
-				else isdrop1 = isdrop2 = 0;
-				
-				//우측이동@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-				char coin1R = arr[coin1X][coin1Y+1];
-				char coun2R = arr[coin2X][coin2Y+1];
-				//코인1 우측
-				if(coin1R == '.') {// 코인1 왼쪽에 공간이 있다면 이동
-					que.add(new Point(coin1X, coin1Y+1)); //큐에 다음좌표 담기
-					arr[coin1X][coin1Y] = '.'; //코인있던자리 빈공간으로
-					arr[coin1X][coin1Y+1] = 'o'; //빈공간 자리 코인으로
-				}
-				else if(coin1R != '#') { //위에서 이동가능 공간이 걸러지고 만약 벽도 아니라면 낭떠러지
-					arr[coin1X][coin1Y] = '.';
-					isdrop1 = 1;// 코인이 떨어짐
-				}else que.add(new Point(coin2X, coin2Y)); //벽인경우 큐에 현재 좌표 담기
-				//코인2 우측
-				if(coun2R == '.') {// 코인2도 왼쪽에 공간이 있다면 이동
-					que.add(new Point(coin2X, coin2Y+1)); //큐에 다음 좌표 담기
-					arr[coin2X][coin2Y] = '.'; //코인있던자리 빈공간으로
-					arr[coin2X][coin2Y+1] = 'o'; //빈공간 자리 코인으로
-				}
-				else if(coun2R != '#') { //위에서 이동가능 공간이 걸러지고 만약 벽도 아니라면 낭떠러지
-					arr[coin2X][coin2Y] = '.';
-					isdrop2 = 1;// 코인이 떨어짐
-				} else que.add(new Point(coin2X, coin2Y)); //벽인경우 큐에 현재 좌표 담기
-				
-				if(isdrop1 != isdrop2) return;
-				else isdrop1 = isdrop2 = 0;
-				
-				//하부이동@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-				char coin1B = arr[coin1X+1][coin1Y];
-				char coun2B = arr[coin2X+1][coin2Y];
-				//코인1 우측
-				if(coin1B == '.') {// 코인1 왼쪽에 공간이 있다면 이동
-					que.add(new Point(coin1X+1, coin1Y)); //큐에 다음좌표 담기
-					arr[coin1X][coin1Y] = '.'; //코인있던자리 빈공간으로
-					arr[coin1X+1][coin1Y] = 'o'; //빈공간 자리 코인으로
-				}
-				else if(coin1B != '#') { //위에서 이동가능 공간이 걸러지고 만약 벽도 아니라면 낭떠러지
-					arr[coin1X][coin1Y] = '.';
-					isdrop1 = 1;// 코인이 떨어짐
-				}else que.add(new Point(coin2X, coin2Y)); //벽인경우 큐에 현재 좌표 담기
-				//코인2 우측
-				if(coun2B == '.') {// 코인2도 왼쪽에 공간이 있다면 이동
-					que.add(new Point(coin2X+1, coin2Y)); //큐에 다음 좌표 담기
-					arr[coin2X][coin2Y] = '.'; //코인있던자리 빈공간으로
-					arr[coin2X+1][coin2Y] = 'o'; //빈공간 자리 코인으로
-				}
-				else if(coun2B != '#') { //위에서 이동가능 공간이 걸러지고 만약 벽도 아니라면 낭떠러지
-					arr[coin2X][coin2Y] = '.';
-					isdrop2 = 1;// 코인이 떨어짐
-				} else que.add(new Point(coin2X, coin2Y)); //벽인경우 큐에 현재 좌표 담기
-				
-				if(isdrop1 != isdrop2) return;
-				else isdrop1 = isdrop2 = 0;
 			}
-			count++;
 		}
+		return -1;
 	}
 }
 /*
