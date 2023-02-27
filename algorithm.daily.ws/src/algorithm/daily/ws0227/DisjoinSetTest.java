@@ -22,7 +22,7 @@ public class DisjoinSetTest {
 		return parents[a] = findSet(parents[a]);
 	}
 	
-	// 두집합 합치
+	// 두집합 합치기
 	static boolean union(int a, int b){
 		int aRoot = findSet(a);
 		int bRoot = findSet(b);
