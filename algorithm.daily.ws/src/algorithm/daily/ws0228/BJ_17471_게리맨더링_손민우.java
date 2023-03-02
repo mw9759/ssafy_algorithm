@@ -94,7 +94,7 @@ public class BJ_17471_게리맨더링_손민우 {
 					if(arr[a][group.get(i)] == 1) {// a선거구 와 i번째 선거구가 연결되어 있다면
 						que.add(group.get(i)); // 큐에 i번째 선거구 삽입.-> 다음while문에서 i번째 선거구 검증.
 						visit[group.get(i)] = 1; // 검증 체크
-						count++; // 검증되었으니 갯수 추가.ss
+						count++; // 검증되었으니 갯수 추가.ssss
 					}
 				}
 			}
