@@ -35,6 +35,7 @@ public class SW_5656_벽돌깨기_손민우 {
 	}
 	// 부술 순서&라인 짜기.
 	static void getTurn(int cnt) {
+		if(answer == 0) return;
 		if(cnt == n) {
 			int count = check(); // 남은 벽돌의 갯수
 			answer = Math.min(answer, count); // 갯수 최소값으로 초기화
@@ -47,7 +48,7 @@ public class SW_5656_벽돌깨기_손민우 {
 		}
 	}
 	
-	// 남은 벽돌 체킹
+	// 벽돌부시고 밀고 남은 벽돌 체킹
 	static int check() {
 		// 원본 배열 담을 복사본 
 		int copyMap[][] = new int[h][w]; 
@@ -63,6 +64,7 @@ public class SW_5656_벽돌깨기_손민우 {
 			attack(line, copyMap,0); // 부술라인, 맵, 0번째 행부터 체크해서 0이아니면 부수기.
 			// 아래로 밀어주기
 			pushMap(copyMap);// 맵
+			if(answer == 0) return 0;
 		}
 		
 		// 남은 갯수 카운팅
@@ -121,21 +123,26 @@ public class SW_5656_벽돌깨기_손민우 {
 		}
 	}
 	// 아래로 밀어주기.
+	static Stack<Integer> stack = new Stack<>();
 	static void pushMap(int[][] copyMap) {
-		Stack<Integer> stack = new Stack<>();
 		// 열별로 조회
+		int count = 0;
 		for(int i = 0; i<w; i++) {
+			
 			for(int j = 0; j<h; j++) {
 				if(copyMap[j][i]>0) { // 벽돌이면
+					count++;
 					stack.push(copyMap[j][i]); // 스택에 넣는다.
 					copyMap[j][i] = 0; // 벽돌자리는 0으로 초기화
 				}
 			}
+			
 			for(int j = h-1; j>=0; j--) { // 마지막 행부터 스택에서 빼서 넣어준다.
 				if(stack.isEmpty()) break; // 스택이 비면 탈출.
 				copyMap[j][i] = stack.pop(); // 스택에서 꺼내서 마지막 행부터 넣어준다.
 			}
 		}
+		if(count == 0) answer = 0;
 	}
 }
 /*
