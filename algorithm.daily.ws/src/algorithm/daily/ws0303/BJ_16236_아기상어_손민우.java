@@ -94,7 +94,7 @@ public class BJ_16236_아기상어_손민우 {
 				int nx = x + dx[i]; // 다음 행 위치
 				int ny = y + dy[i]; // 다음 열 위치 
 				
-				if(nx<0 || nx>=n || ny<0 || ny>=n) continue; // 인덱스 범위 밖: 안간ㄷ.
+				if(nx<0 || nx>=n || ny<0 || ny>=n) continue; // 인덱스 범위 밖: 안간ㄷㅏ.
 				if(visited[nx][ny] == 1) continue; // 왔었돈 곳이면 : 안간다
 				if(map[nx][ny]>sharkSize) continue; // 상어보다 큰 물고기가 있으면 안간다.
 				
