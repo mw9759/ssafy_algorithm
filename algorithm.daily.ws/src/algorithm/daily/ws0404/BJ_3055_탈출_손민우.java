@@ -7,7 +7,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class BJ_17472_탈출_손민우 {
+public class BJ_3055_탈출_손민우 {
 	
 	static int r, c, visited[][];
 	static char map[][];
